@@ -33,9 +33,6 @@
         button:hover {
             background-color: #5c6bc0; 
         }
-        .result { 
-            margin-top: 20px; 
-        }
         .number { 
             font-size: 36px; 
             font-weight: bold; 
@@ -54,13 +51,35 @@
             padding: 10px; 
             border-radius: 5px; 
         }
+        /* Novos estilos para layout responsivo */
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .left-column, .right-column {
+            flex: 1;
+            margin: 10px;
+        }
+        .result {
+            margin-top: 20px; 
+        }
         #numogramCanvas {
-            margin-top: 30px;
             background-color: #222;
             border: 1px solid #444;
             display: block;
             margin-left: auto;
             margin-right: auto;
+            max-width: 100%;
+        }
+        /* Ajuste para telas pequenas */
+        @media screen and (max-width: 800px) {
+            .container {
+                flex-direction: column;
+            }
+            .left-column, .right-column {
+                margin: 0;
+            }
         }
     </style>
     <script>
@@ -162,7 +181,7 @@
             
             var centerX = canvas.width / 2;
             var centerY = canvas.height / 2;
-            var radius = 200;
+            var radius = Math.min(canvas.width, canvas.height) / 2 - 50;
             
             // Define os números a serem exibidos
             var numbers = [1,2,3,4,5,6,7,8,9,11,22,33];
@@ -223,21 +242,26 @@
 </head>
 <body>
     <h1>Numograma Interativo</h1>
-    <label for="nome">Nome Completo:</label><br>
-    <input type="text" id="nome" placeholder="Digite seu nome completo"><br>
-    <label for="dataNascimento">Data de Nascimento (DD/MM/AAAA):</label><br>
-    <input type="text" id="dataNascimento" placeholder="Exemplo: 01/01/2000"><br>
-    <button onclick="calcular()">Calcular</button>
+    <div class="container">
+        <div class="left-column">
+            <label for="nome">Nome Completo:</label><br>
+            <input type="text" id="nome" placeholder="Digite seu nome completo"><br>
+            <label for="dataNascimento">Data de Nascimento (DD/MM/AAAA):</label><br>
+            <input type="text" id="dataNascimento" placeholder="Exemplo: 01/01/2000"><br>
+            <button onclick="calcular()">Calcular</button>
 
-    <div class="result">
-        <p>Número do Nome: <span class="number" id="nomeNumero" onclick="mostrarSignificado('nome')"></span></p>
-        <p>Número da Data de Nascimento: <span class="number" id="dataNumero" onclick="mostrarSignificado('data')"></span></p>
+            <div class="result">
+                <p>Número do Nome: <span class="number" id="nomeNumero" onclick="mostrarSignificado('nome')"></span></p>
+                <p>Número da Data de Nascimento: <span class="number" id="dataNumero" onclick="mostrarSignificado('data')"></span></p>
 
-        <div id="interpretacaoNome" class="interpretation"></div>
-        <div id="interpretacaoData" class="interpretation"></div>
+                <div id="interpretacaoNome" class="interpretation"></div>
+                <div id="interpretacaoData" class="interpretation"></div>
+            </div>
+        </div>
+        <div class="right-column">
+            <!-- Canvas para o numograma -->
+            <canvas id="numogramCanvas" width="500" height="500"></canvas>
+        </div>
     </div>
-
-    <!-- Canvas para o numograma -->
-    <canvas id="numogramCanvas" width="500" height="500"></canvas>
 </body>
 </html>
