@@ -30,6 +30,8 @@ function calcular() {
     // Oculta as interpretações anteriores
     document.getElementById('interpretacaoNome').style.display = 'none';
     document.getElementById('interpretacaoData').style.display = 'none';
+    document.getElementById('interpretacaoNumograma').classList.remove('visible');
+    document.getElementById('interpretacaoNumograma').innerText = '';
 
     // Desenha o numograma
     drawNumogram(nomeNumero, dataNumero);
@@ -61,11 +63,15 @@ function mostrarSignificado(tipo) {
         document.getElementById('interpretacaoNome').innerText = obterInterpretacao(parseInt(numero));
         document.getElementById('interpretacaoNome').style.display = 'block';
         document.getElementById('interpretacaoData').style.display = 'none';
+        document.getElementById('interpretacaoNumograma').classList.remove('visible');
+        document.getElementById('interpretacaoNumograma').innerText = '';
     } else if (tipo === 'data') {
         numero = document.getElementById('dataNumero').innerText;
         document.getElementById('interpretacaoData').innerText = obterInterpretacao(parseInt(numero));
         document.getElementById('interpretacaoData').style.display = 'block';
         document.getElementById('interpretacaoNome').style.display = 'none';
+        document.getElementById('interpretacaoNumograma').classList.remove('visible');
+        document.getElementById('interpretacaoNumograma').innerText = '';
     }
 }
 
@@ -74,7 +80,7 @@ function obterInterpretacao(numero) {
         1: "Início, liderança, independência.",
         2: "Cooperação, equilíbrio, parceria.",
         3: "Criatividade, comunicação, expressão.",
-        4: "Estabilidade, ordem, trabalho árduro.",
+        4: "Estabilidade, ordem, trabalho árduo.",
         5: "Mudança, liberdade, aventura.",
         6: "Harmonia, responsabilidade, cuidado.",
         7: "Espiritualidade, introspecção, sabedoria.",
@@ -102,6 +108,9 @@ function drawNumogram(nomeNumero, dataNumero) {
     var numbers = [1,2,3,4,5,6,7,8,9,11,22,33];
     var totalNumbers = numbers.length;
 
+    // Armazena as posições dos números para interatividade
+    var numberPositions = [];
+
     // Desenha o círculo externo
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
@@ -127,6 +136,9 @@ function drawNumogram(nomeNumero, dataNumero) {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(num, x, y);
+
+        // Salva a posição e o número para interatividade
+        numberPositions.push({x: x, y: y, number: num});
     }
 
     // Torna o canvas interativo
@@ -135,21 +147,26 @@ function drawNumogram(nomeNumero, dataNumero) {
         var xClick = event.clientX - rect.left;
         var yClick = event.clientY - rect.top;
 
-        for (var i = 0; i < totalNumbers; i++) {
-            var angle = (2 * Math.PI / totalNumbers) * i - Math.PI / 2;
-            var x = centerX + radius * Math.cos(angle);
-            var y = centerY + radius * Math.sin(angle);
-
-            var dx = x - xClick;
-            var dy = y - yClick;
+        for (var i = 0; i < numberPositions.length; i++) {
+            var dx = numberPositions[i].x - xClick;
+            var dy = numberPositions[i].y - yClick;
             var distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < 15) { // Se clicou próximo ao número
-                var selectedNumber = numbers[i];
+                var selectedNumber = numberPositions[i].number;
                 var interpretation = obterInterpretacao(selectedNumber);
-                alert("Número " + selectedNumber + ": " + interpretation);
+                exibirInterpretacaoNumograma(selectedNumber, interpretation);
                 break;
             }
         }
     };
+}
+
+function exibirInterpretacaoNumograma(numero, interpretacao) {
+    var interpretacaoDiv = document.getElementById('interpretacaoNumograma');
+    interpretacaoDiv.innerHTML = "<strong>Número " + numero + ":</strong> " + interpretacao;
+    interpretacaoDiv.classList.add('visible');
+    // Oculta outras interpretações
+    document.getElementById('interpretacaoNome').style.display = 'none';
+    document.getElementById('interpretacaoData').style.display = 'none';
 }

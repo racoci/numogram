@@ -45,6 +45,9 @@ button:hover {
     padding: 10px; 
     border-radius: 5px; 
 }
+.interpretation.visible {
+    display: block;
+}
 /* Novos estilos para layout responsivo */
 .container {
     display: flex;
