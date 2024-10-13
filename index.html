@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Numograma Interativo</title>
+    <style>
+        /* Estilos básicos */
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input { margin: 5px 0; padding: 5px; width: 300px; }
+        button { padding: 5px 10px; margin-top: 10px; }
+        .result { margin-top: 20px; }
+        .number { font-size: 24px; font-weight: bold; cursor: pointer; color: blue; }
+        .interpretation { display: none; margin-top: 10px; }
+    </style>
+    <script>
+        function calcular() {
+            var nome = document.getElementById('nome').value.toUpperCase().replace(/[^A-Z]/g, '');
+            var dataNascimento = document.getElementById('dataNascimento').value.replace(/[^0-9]/g, '');
+
+            // Verifica se os campos estão preenchidos
+            if (nome === '' || dataNascimento === '') {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            // Converte as letras do nome em números e soma
+            var nomeTotal = 0;
+            for (var i = 0; i < nome.length; i++) {
+                var charCode = nome.charCodeAt(i) - 64; // A=1, B=2, ..., Z=26
+                nomeTotal += charCode;
+            }
+            var nomeNumero = reduzirNumero(nomeTotal);
+
+            // Soma os dígitos da data de nascimento
+            var dataTotal = 0;
+            for (var i = 0; i < dataNascimento.length; i++) {
+                dataTotal += parseInt(dataNascimento.charAt(i));
+            }
+            var dataNumero = reduzirNumero(dataTotal);
+
+            // Exibe os resultados
+            document.getElementById('nomeNumero').innerText = nomeNumero;
+            document.getElementById('dataNumero').innerText = dataNumero;
+
+            // Oculta as interpretações anteriores
+            document.getElementById('interpretacaoNome').style.display = 'none';
+            document.getElementById('interpretacaoData').style.display = 'none';
+        }
+
+        function reduzirNumero(num) {
+            while (num > 9 && num !== 11 && num !== 22 && num !== 33) {
+                var soma = 0;
+                var numStr = num.toString();
+                for (var i = 0; i < numStr.length; i++) {
+                    soma += parseInt(numStr.charAt(i));
+                }
+                num = soma;
+            }
+            return num;
+        }
+
+        function mostrarSignificado(tipo) {
+            var numero;
+            if (tipo === 'nome') {
+                numero = document.getElementById('nomeNumero').innerText;
+                document.getElementById('interpretacaoNome').innerText = obterInterpretacao(parseInt(numero));
+                document.getElementById('interpretacaoNome').style.display = 'block';
+                document.getElementById('interpretacaoData').style.display = 'none';
+            } else if (tipo === 'data') {
+                numero = document.getElementById('dataNumero').innerText;
+                document.getElementById('interpretacaoData').innerText = obterInterpretacao(parseInt(numero));
+                document.getElementById('interpretacaoData').style.display = 'block';
+                document.getElementById('interpretacaoNome').style.display = 'none';
+            }
+        }
+
+        function obterInterpretacao(numero) {
+            var significados = {
+                1: "Início, liderança, independência.",
+                2: "Cooperação, equilíbrio, parceria.",
+                3: "Criatividade, comunicação, expressão.",
+                4: "Estabilidade, ordem, trabalho árduo.",
+                5: "Mudança, liberdade, aventura.",
+                6: "Harmonia, responsabilidade, cuidado.",
+                7: "Espiritualidade, introspecção, sabedoria.",
+                8: "Abundância, poder, sucesso material.",
+                9: "Compaixão, altruísmo, completude.",
+                11: "Intuição elevada, inspiração.",
+                22: "Construtor mestre, realização prática.",
+                33: "Mestre professor, cura através do amor."
+            };
+            return significados[numero] || "Sem interpretação disponível.";
+        }
+    </script>
+</head>
+<body>
+    <h1>Numograma Interativo</h1>
+    <label for="nome">Nome Completo:</label><br>
+    <input type="text" id="nome" placeholder="Digite seu nome completo"><br>
+    <label for="dataNascimento">Data de Nascimento (DD/MM/AAAA):</label><br>
+    <input type="text" id="dataNascimento" placeholder="Exemplo: 01/01/2000"><br>
+    <button onclick="calcular()">Calcular</button>
+
+    <div class="result">
+        <p>Número do Nome: <span class="number" id="nomeNumero" onclick="mostrarSignificado('nome')"></span></p>
+        <p>Número da Data de Nascimento: <span class="number" id="dataNumero" onclick="mostrarSignificado('data')"></span></p>
+
+        <div id="interpretacaoNome" class="interpretation"></div>
+        <div id="interpretacaoData" class="interpretation"></div>
+    </div>
+</body>
+</html>
