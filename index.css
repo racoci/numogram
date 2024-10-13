@@ -1,0 +1,77 @@
+/* Estilos básicos */
+body {
+    font-family: 'Arial', sans-serif; 
+    margin: 20px; 
+    background-color: #121212; 
+    color: #ffffff;
+}
+input { 
+    margin: 5px 0; 
+    padding: 10px; 
+    width: 100%; 
+    border: 1px solid #444; 
+    border-radius: 5px; 
+    background-color: #222; 
+    color: #fff; 
+}
+button { 
+    padding: 10px 15px; 
+    margin-top: 10px; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: #3f51b5; 
+    color: white; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+}
+button:hover {
+    background-color: #5c6bc0; 
+}
+.number { 
+    font-size: 36px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    color: #3f51b5; 
+    transition: transform 0.3s;
+}
+.number:hover {
+    transform: scale(1.2);
+}
+.interpretation { 
+    display: none; 
+    margin-top: 10px; 
+    font-size: 18px; 
+    background-color: #333; 
+    padding: 10px; 
+    border-radius: 5px; 
+}
+/* Novos estilos para layout responsivo */
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.left-column, .right-column {
+    flex: 1;
+    margin: 10px;
+}
+.result {
+    margin-top: 20px; 
+}
+#numogramCanvas {
+    background-color: #222;
+    border: 1px solid #444;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+}
+/* Ajuste para telas pequenas */
+@media screen and (max-width: 800px) {
+    .container {
+        flex-direction: column;
+    }
+    .left-column, .right-column {
+        margin: 0;
+    }
+}
